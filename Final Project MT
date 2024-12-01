@@ -1,0 +1,114 @@
+//Product class
+public class Product {
+    protected int id;
+    protected String name;
+    protected double price;
+    protected int stock;
+    protected String category;
+
+    // Constructor
+    public Product(int id, String name, double price, int stock, String category) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.stock = stock;
+        this.category = category;
+    }
+
+    // Getters and toString() for displaying product details
+    public String getName() {
+        return name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    @Override
+    public String toString() {
+        return name + " - $" + price;
+    }
+}
+//Electronics Subclass
+public class Electronics extends Product {
+    private String warranty;
+
+    public Electronics(int id, String name, double price, int stock, String warranty) {
+        super(id, name, price, stock, "Electronics");
+        this.warranty = warranty;
+    }
+}
+//User class and Subclass
+public class Customer extends User {
+    private List<Product> cart;
+
+    public Customer(int id, String name, String email) {
+        super(id, name, email, "Customer");
+        this.cart = new ArrayList<>();
+    }
+
+    public void addToCart(Product product) {
+        cart.add(product);
+    }
+
+    public List<Product> getCart() {
+        return cart;
+    }
+}
+//Order Class
+public class Order {
+    private int orderId;
+    private List<Product> items;
+    private double total;
+
+    public Order(int orderId, List<Product> items) {
+        this.orderId = orderId;
+        this.items = items;
+        this.total = calculateTotal();
+    }
+    private double calculateTotal() {
+        return items.stream().mapToDouble(Product::getPrice).sum();
+    }
+    public double applyDiscount(double discountRate) {
+        total = total - (total * discountRate);
+        return total;
+    }
+    @Override
+    public String toString() {
+        return "Order ID: " + orderId + ", Total: $" + total;
+    }
+}
+
+//Filtering Products
+List<Product> electronics = products.stream()
+    .filter(product -> product.getCategory().equals("Electronics"))
+    .collect(Collectors.toList());
+//Calculating Cart Totals
+double cartTotal = customer.getCart().stream()
+    .mapToDouble(Product::getPrice)
+    .sum();
+
+//Applying Discounts
+Function<Double, Double> applyDiscount = total -> total * 0.90; // 10% discount
+double discountedTotal = applyDiscount.apply(cartTotal);
+
+//Search Functionality
+List<Product> searchResults = products.stream()
+    .filter(product -> product.getName().toLowerCase().contains("laptop"))
+    .collect(Collectors.toList());
+
+//Sorting
+List<Product> sortedProducts = products.stream()
+    .sorted(Comparator.comparing(Product::getPrice))
+    .collect(Collectors.toList());
+
+//Order History
+List<Product> sortedProducts = products.stream()
+    .sorted(Comparator.comparing(Product::getPrice))
+    .collect(Collectors.toList());
+
+
